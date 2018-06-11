@@ -9,8 +9,7 @@ async function runAccessibilityTest() {
     try {
 
         // Read URLs from external file
-        // let urls = fs.readFileSync('urls.txt').toString().split("\n");
-        let urls = ['https://www.nationalgeographic.org/dc/exhibitions/titanic-untold-story', 'https://www.nationalgeographic.org/encyclopedia/crust']
+        let urls = process.env.A11Y_URLS || fs.readFileSync('urls.txt').toString().split("\n");
 
         // Create reports dir if it doesn't exist
         if (urls.length > 0 && !fs.existsSync('./reports')) {
