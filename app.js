@@ -8,8 +8,8 @@ runAccessibilityTest();
 async function runAccessibilityTest() {
     try {
 
-        // Read URLs from external file
-        let urls = process.env.A11Y_URLS.split('\n') || fs.readFileSync('urls.txt').toString().split('\n');
+        // Read URLs from [Jenkins] env variable
+        let urls = process.env.A11Y_URLS.split('\n');
 
         // Create reports dir if it doesn't exist
         if (urls.length > 0 && !fs.existsSync('./reports')) {
@@ -29,15 +29,21 @@ async function runAccessibilityTest() {
         let summaryWriter = csvWriter({ headers: ['URL', 'Errors', 'Warnings', 'Notices']})
         summaryWriter.pipe(fs.createWriteStream('summary.csv'))
 
+        // Save summary to return to Jenkins job for email notification
+        let summary = [];
+
         results.map((r) => {
 
             // Write single row summary for URL
-            summaryWriter.write([
+            let summaryRow = [
                 r.pageUrl,
                 r.issues.filter((i) => i.typeCode === 1).length,
                 r.issues.filter((i) => i.typeCode === 2).length,
                 r.issues.filter((i) => i.typeCode === 3).length
-            ])
+            ]
+
+            summaryWriter.write(summaryRow);
+            summary.push(summaryRow)
 
             // Write complete report for URL
             let reportWriter = csvWriter()
@@ -50,8 +56,7 @@ async function runAccessibilityTest() {
         })
 
         summaryWriter.end()
-
-        return results;
+        return summary;
 
     } catch (error) {
         console.error(error.message);
