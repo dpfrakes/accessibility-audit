@@ -9,7 +9,7 @@ async function runAccessibilityTest() {
     try {
 
         // Read URLs from external file
-        let urls = process.env.A11Y_URLS || fs.readFileSync('urls.txt').toString().split("\n");
+        let urls = process.env.A11Y_URLS.split('\n') || fs.readFileSync('urls.txt').toString().split('\n');
 
         // Create reports dir if it doesn't exist
         if (urls.length > 0 && !fs.existsSync('./reports')) {
@@ -50,6 +50,8 @@ async function runAccessibilityTest() {
         })
 
         summaryWriter.end()
+
+        return results;
 
     } catch (error) {
         console.error(error.message);
