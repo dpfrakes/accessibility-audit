@@ -31,9 +31,10 @@ async function runAccessibilityTest() {
 
         // Global options
         let options = {
-            'timeout': 60000,
-            'includeWarnings': true,
-            'includeNotices': true
+            standard: 'WCAG2A',
+            timeout: 60000,
+            includeWarnings: true,
+            includeNotices: true
         };
 
         // Run tests against multiple URLs
