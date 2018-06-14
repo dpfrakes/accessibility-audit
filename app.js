@@ -31,7 +31,7 @@ async function runAccessibilityTest() {
 
         // Global options
         let options = {
-            standard: 'WCAG2A',
+            standard: 'WCAG2AA',
             timeout: 60000,
             includeWarnings: true,
             includeNotices: true
