@@ -15,9 +15,10 @@ function writeSummary(content) {
 }
 
 function outputHTML(data) {
+    console.log('Exporting report...')
     let html = fs.readFileSync('./report_template.html', 'utf8');
     html = html.replace('REPLACEME', JSON.stringify(data));
-    fs.writeFile('report.html', html, 'utf8', (err) => {
+    fs.writeFile('report/index.html', html, 'utf8', (err) => {
         if (err) throw err;
         console.log('Saved HTML report');
     });
@@ -48,6 +49,8 @@ async function runAccessibilityTest() {
             includeWarnings: true,
             includeNotices: false
         };
+
+        console.log(options);
 
         // Run tests against multiple URLs
         let results = await Promise.all(urls.map((url) => pa11y(url, options)));
