@@ -14,15 +14,27 @@ function writeSummary(content) {
     writer.end();
 }
 
+function outputHTML(data) {
+    let html = fs.readFileSync('./report_template.html', 'utf8');
+    html = html.replace('REPLACEME', JSON.stringify(data));
+    fs.writeFile('report.html', html, 'utf8', (err) => {
+        if (err) throw err;
+        console.log('Saved HTML report');
+    });
+}
+
 async function runAccessibilityTest() {
 
     try {
+
+        // Save all details in JSON object
+        let allResults = {};
 
         // Runtime
         let datetime = new Date();
 
         // Read URLs from [Jenkins] env variable
-        let urls = process.env.A11Y_URLS.split('\n');
+        let urls = ['https://www.facebook.com', 'https://www.twitter.com']; // process.env.A11Y_URLS.split('\n');
 
         // Create reports dir if it doesn't exist
         if (urls.length > 0 && !fs.existsSync('./reports')) {
@@ -34,7 +46,7 @@ async function runAccessibilityTest() {
             standard: 'WCAG2AA',
             timeout: 60000,
             includeWarnings: true,
-            includeNotices: true
+            includeNotices: false
         };
 
         // Run tests against multiple URLs
@@ -53,6 +65,14 @@ async function runAccessibilityTest() {
                 'Notices': r.issues.filter((i) => i.typeCode === 3).length,
                 'Last Update': datetime.toLocaleString()
             });
+
+            // Save details to single JS object
+            let detailObj = r.issues.reduce((a, b) => {
+                a[b.code] = b.code in a ? a[b.code] + 1 : 1;
+                return a;
+            }, {});
+
+            allResults[r.pageUrl] = detailObj;
 
             // Write complete report for URL
             let reportWriter = csvWriter()
@@ -77,6 +97,9 @@ async function runAccessibilityTest() {
         } else {
             writeSummary(summary);
         }
+
+        // Write JSON to report HTML
+        outputHTML(allResults);
 
     } catch (error) {
         console.error(error.message);
