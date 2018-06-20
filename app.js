@@ -35,7 +35,7 @@ async function runAccessibilityTest() {
         let datetime = new Date();
 
         // Read URLs from [Jenkins] env variable
-        let urls = ['https://www.facebook.com', 'https://www.twitter.com']; // process.env.A11Y_URLS.split('\n');
+        let urls = process.env.A11Y_URLS.split('\n');
 
         // Create reports dir if it doesn't exist
         if (urls.length > 0 && !fs.existsSync('./reports')) {
