@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WCAG 2.1 Report (AA)</title>
+</head>
+<body>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+<div id="container" style="min-width: 310px; margin: 0 auto"></div>
+
+<script>
+let data = REPLACEME || {};
+let sites = Object.keys(data);
+
+let uniqueCodes = [];
+sites.forEach((s) => {
+    codes = Object.keys(data[s]);
+    uniqueCodes = Array.from(new Set(uniqueCodes.concat(codes)))
+});
+
+let series = [];
+uniqueCodes.forEach((code) => {
+    let siteArray = [];
+    sites.forEach((s) => siteArray.push(data[s][code] || 0))
+    series.push({
+        name: code,
+        data: siteArray
+    })
+});
+
+Highcharts.chart('container', {
+  chart: {
+    type: 'column',
+    height: 1200
+  },
+  title: {
+    text: 'WCAG Error Analysis'
+  },
+  xAxis: {
+    categories: sites
+  },
+  yAxis: {
+    min: 0,
+    title: {
+      text: 'WCAG Errors'
+    },
+    stackLabels: {
+      enabled: true,
+      style: {
+        fontWeight: 'bold',
+        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+      }
+    }
+  },
+  tooltip: {
+    headerFormat: '<b>{point.x}</b><br/>',
+    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+  },
+  plotOptions: {
+    column: {
+      stacking: 'normal',
+      dataLabels: {
+        enabled: true,
+        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+      }
+    }
+  },
+  series: series
+});
+</script>
+
+</body>
+</html>
