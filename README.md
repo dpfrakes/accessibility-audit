@@ -1,5 +1,23 @@
 # Accessibility Audit
 
+### Installation
+
+```
+git clone https://github.com/dpfrakes/accessibility-audit.git
+cd accessibility-audit
+npm i
+
+```
+
+Manually replace Jenkins variables with URLs to audit
+
+```
+node app.js
+```
+
+See `report/index.html` for graphical summary
+See `reports/*.csv` for detailed page-specific reports
+
 ### TODO
 
 - [ ] Install chromium headless on jenkins server
