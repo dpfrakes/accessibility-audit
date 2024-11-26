@@ -2,16 +2,15 @@
 
 ### Installation
 
-```
-git clone https://github.com/dpfrakes/accessibility-audit.git
+```sh
+git clone git@github.com:dpfrakes/accessibility-audit.git
 cd accessibility-audit
 npm i
-
 ```
 
 Manually replace Jenkins variables with URLs to audit
 
-```
+```sh
 node app.js
 ```
 
